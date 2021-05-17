@@ -2,19 +2,20 @@
 FDZ
 ===
 
-# FDZ
+FDZ
+---
 
-## FDZ - Fruende Des Zettelkastens
+FDZ - Fruende Des Zettelkastens
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-FDZ is a CLI [Zettelkasten](https://en.wikipedia.org/wiki/Zettelkasten) tool
-written in python.
+FDZ is a CLI 
+`Zettelkasten <https://en.wikipedia.org/wiki/Zettelkasten>`__
+tool written in python.
 
 This tool came out of the Fruende Des Zettelkasten brunch call.
 
 The project came about from conversations between Eden Attar, Ben Oye, Michael
 Berson, and Alek Binion. 
-
-
 
 
 .. image:: https://img.shields.io/pypi/v/fdz.svg
