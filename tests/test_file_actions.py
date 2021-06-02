@@ -21,13 +21,15 @@ def clean_up(func):
     def wrapper_cleanup(*args,**kwargs):
         if os.path.exists(TEST_FILE_EVENTS_DIR):
             raise ValueError("temporary test directory should not exist, abort testing")
+        current_directory = os.getcwd()
         os.makedirs(TEST_FILE_EVENTS_DIR)
         os.chdir(TEST_FILE_EVENTS_DIR)
+        print(current_directory)
         try:
             result = func(*args, **kwargs)
             return result
         finally:
-            os.chdir("..")
+            os.chdir(current_directory)
             shutil.rmtree(TEST_FILE_EVENTS_DIR)
     return wrapper_cleanup
 
@@ -37,7 +39,7 @@ class TestFileActions(unittest.TestCase):
     @clean_up
     def test_init(self):
         """Test Directory Initialization."""
-        file_actions.safe_initializer()
+        file_actions.safe_init()
         root = file_actions.DEFAULT_DIR_STRUCTURE["name"]
         self.assertTrue(os.path.exists(root))
         for k,v in file_actions.DEFAULT_DIR_STRUCTURE["contents"].items():
@@ -48,18 +50,44 @@ class TestFileActions(unittest.TestCase):
 
     @clean_up
     def test_double_init(self):
-        self.assertTrue(file_actions.safe_initializer())
-        self.assertFalse(file_actions.safe_initializer())
+        self.assertTrue(file_actions.safe_init())
+        self.assertFalse(file_actions.safe_init())
 
     @clean_up
     def test_different_dir_name(self):
         # test passed in file name
         test_file_name = "test-file-for-friends"
-        self.assertTrue(file_actions.safe_initializer(test_file_name))
+        self.assertTrue(file_actions.safe_init(test_file_name))
         self.assertTrue(os.path.exists(test_file_name))
     
     @clean_up
-    def test_bad_dir_name(self):
-        # test bad dictionary
-        with self.assertRaises(ValueError):
-            file_actions.safe_initializer(None, {"test" : "bad"})
+    def test_is_init(self):
+        self.assertFalse(file_actions.is_init())
+        path = file_actions.safe_init()
+        os.chdir(path)
+        self.assertTrue(file_actions.is_init())
+        os.chdir("..")
+
+    def test_make_path(self):
+        self.assertEqual(file_actions.make_path(".txt", "1","2","3"), "1/2/3.txt")
+        self.assertEqual(file_actions.make_path("","1"),"1")
+
+    @clean_up
+    def test_date(self):
+        with self.assertRaises(OSError):
+            self.assertFalse(file_actions.new_daily_note())
+        os.chdir(file_actions.safe_init())
+        path = file_actions.new_daily_note()
+        self.assertTrue(os.path.exists(path))
+        self.assertFalse(file_actions.new_daily_note())
+
+    @clean_up
+    def test_bib_note(self):
+        with self.assertRaises(OSError):
+            self.assertFalse(file_actions.new_bib_note("2021", "smith"))
+        os.chdir(file_actions.safe_init())
+        path = file_actions.new_bib_note("2021", "daniels")
+        self.assertEqual(path, "bibliography/2021daniels.md")
+        self.assertTrue(os.path.exists(path))
+        self.assertFalse(file_actions.new_bib_note("2021", "daniels"))
+
