@@ -23,9 +23,6 @@ DEFAULT_DIR_STRUCTURE = {
     }
 
 
-
-make_path = lambda ext, *p : ('/'.join(p))+ext
-
 def make_path(ext, *p):
     path = ('/'.join(p))
     if ext:
@@ -88,9 +85,17 @@ def new_bib_note(pub_date, author, extra = ""):
     _make_file(new_note)
     return new_note
 
-
-
-
- 
+@check_is_init
+def new_zettl_note(*delimiters):
+    for x in delimiters:
+    	if type(x) != int:
+    		raise ValueError("delimiters must be integers")
+    str_delimiters = [str(d) for d in delimiters]
+    note = "-".join(str_delimiters)
+    new_note = make_path(".md", ZETTL, note)
+    if os.path.exists(new_note):
+    	raise ValueError("This note already exists. Pick a new note")
+    _make_file(new_note)
+    return new_note
 
 

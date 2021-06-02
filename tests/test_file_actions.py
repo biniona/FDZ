@@ -65,7 +65,21 @@ class TestFileActions(unittest.TestCase):
             self.assertFalse(file_actions.new_bib_note("2021", "smith"))
         os.chdir(file_actions.safe_init())
         path = file_actions.new_bib_note("2021", "daniels")
-        self.assertEqual(path, "bibliography/2021daniels.md")
+        self.assertEqual(path, f"{file_actions.BIB}/2021daniels.md")
         self.assertTrue(os.path.exists(path))
         self.assertFalse(file_actions.new_bib_note("2021", "daniels"))
+
+    @clean_up
+    def test_zettl_note(self):
+        with self.assertRaises(OSError):
+            self.assertFalse(file_actions.new_zettl_note(1,2,3,4,5))
+        os.chdir(file_actions.safe_init())
+        path = file_actions.new_zettl_note(1,2,3,4)
+        self.assertEqual(path, f"{file_actions.ZETTL}/1-2-3-4.md")
+        self.assertTrue(os.path.exists(path))
+        with self.assertRaises(ValueError):
+            file_actions.new_zettl_note(1,2,3,4)
+        with self.assertRaises(ValueError):
+            file_actions.new_zettl_note("1","2",3,4)
+
 
