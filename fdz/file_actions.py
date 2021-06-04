@@ -3,6 +3,7 @@ import os
 
 from functools import wraps
 from datetime import date
+from fdz.templates import DAILY_TMPL, BIB_TMPL, ZETTL_TMPL, SETTINGS_TMPL
 
 INIT_FILE = ".fdzrc.json"
 DAILY = "daily"
@@ -29,8 +30,9 @@ def make_path(ext, *p):
         path += ext
     return path
 
-def _make_file(file_name):
-    with open(file_name, 'w'): pass
+def _make_file(file_name, template):
+    with open(file_name, 'w') as f:
+        f.write(template)
 
 def is_init():
     if os.path.exists(INIT_FILE):
@@ -63,7 +65,7 @@ def safe_init(zettl_dir_name = None):
         if v["type"] == "directory":
             os.mkdir(new_file_name)
         elif v["type"] == "settings":
-            _make_file(new_file_name)
+            _make_file(new_file_name, SETTINGS_TMPL)
         else:
             raise ValueError(f"Invalid type {v['Type']} for {new_file_name}")
     return zettl_dir_name    
@@ -74,7 +76,7 @@ def new_daily_note():
     new_path = make_path(".md", DAILY, today_str)
     if os.path.exists(new_path):
         return False
-    _make_file(new_path)
+    _make_file(new_path, DAILY_TMPL(today_str))
     return new_path
 
 @check_is_init
@@ -82,7 +84,7 @@ def new_bib_note(pub_date, author, extra = ""):
     new_note = make_path(".md", BIB, f"{pub_date}{author}{extra}")
     if os.path.exists(new_note):
     	return False
-    _make_file(new_note)
+    _make_file(new_note, BIB_TMPL(pub_date, author, extra))
     return new_note
 
 @check_is_init
@@ -95,7 +97,7 @@ def new_zettl_note(*delimiters):
     new_note = make_path(".md", ZETTL, note)
     if os.path.exists(new_note):
     	raise ValueError("This note already exists. Pick a new note")
-    _make_file(new_note)
+    _make_file(new_note, ZETTL_TMPL(str_delimiters))
     return new_note
 
 
