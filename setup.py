@@ -33,7 +33,7 @@ setup(
     description="Zettelkasten CLI tool",
     entry_points={
         'console_scripts': [
-            'fdz=fdz.cli:main',
+            'fdz=fdz.cli:cli',
         ],
     },
     install_requires=requirements,

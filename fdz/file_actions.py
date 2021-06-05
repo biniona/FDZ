@@ -51,9 +51,8 @@ def check_is_init(func):
 
 def safe_init(zettl_dir_name = None):
     """initialize your zettlekesten directory."""
-    root_name = DEFAULT_DIR_STRUCTURE[NAME]
     if not zettl_dir_name:
-        zettl_dir_name = root_name
+        zettl_dir_name = DEFAULT_DIR_STRUCTURE[NAME]
     if os.path.exists(zettl_dir_name):
         return False
     os.mkdir(zettl_dir_name)
