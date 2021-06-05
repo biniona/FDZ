@@ -46,7 +46,8 @@ def check_is_init(func):
             result = func(*args, **kwargs)
             return result
         else:
-            raise OSError("Direcory Not Initialized")
+            print("Need to initialize your zettlekesten directory.")
+            #raise OSError("Direcory Not Initialized")
     return wrapper
 
 def safe_init(zettl_dir_name = None):
@@ -82,21 +83,23 @@ def new_daily_note():
 def new_bib_note(pub_date, author, extra = ""):
     new_note = make_path(".md", BIB, f"{pub_date}{author}{extra}")
     if os.path.exists(new_note):
-    	return False
+        return False
     _make_file(new_note, BIB_TMPL(pub_date, author, extra))
     return new_note
 
 @check_is_init
 def new_zettl_note(*delimiters):
     for x in delimiters:
-    	if type(x) != int:
-    		raise ValueError("delimiters must be integers")
+        try:
+            int(x)
+        except ValueError:
+            print("Invalid note name. Note must be numbers and periods.")
+            return
     str_delimiters = [str(d) for d in delimiters]
     note = "-".join(str_delimiters)
     new_note = make_path(".md", ZETTL, note)
     if os.path.exists(new_note):
-    	raise ValueError("This note already exists. Pick a new note")
+        print("This note already exists. Pick a new note")
+        return
     _make_file(new_note, ZETTL_TMPL(str_delimiters))
     return new_note
-
-
