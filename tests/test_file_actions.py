@@ -20,16 +20,12 @@ class TestFileActions(unittest.TestCase):
         file_actions.safe_init()
         root = file_actions.DEFAULT_DIR_STRUCTURE["name"]
         self.assertTrue(os.path.exists(root))
+        # all default files exist in directory
         for k,v in file_actions.DEFAULT_DIR_STRUCTURE["contents"].items():
             check = k
             if v.get("name"):
                 check = v.get("name")
             self.assertTrue(os.path.exists(f"{root}/{check}"))
-
-    @clean_up
-    def test_double_init(self):
-        self.assertTrue(file_actions.safe_init())
-        self.assertFalse(file_actions.safe_init())
 
     @clean_up
     def test_different_dir_name(self):
@@ -44,7 +40,6 @@ class TestFileActions(unittest.TestCase):
         path = file_actions.safe_init()
         os.chdir(path)
         self.assertTrue(file_actions.is_init())
-        os.chdir("..")
 
     def test_make_path(self):
         self.assertEqual(file_actions.make_path(".txt", "1","2","3"), "1/2/3.txt")
@@ -52,34 +47,36 @@ class TestFileActions(unittest.TestCase):
 
     @clean_up
     def test_date(self):
-        with self.assertRaises(OSError):
-            self.assertFalse(file_actions.new_daily_note())
+        # can't make date outside of zettl
+        self.assertEqual(file_actions.new_daily_note(), None)
         os.chdir(file_actions.safe_init())
         path = file_actions.new_daily_note()
+        # date note exists
         self.assertTrue(os.path.exists(path))
-        self.assertFalse(file_actions.new_daily_note())
 
     @clean_up
     def test_bib_note(self):
-        with self.assertRaises(OSError):
-            self.assertFalse(file_actions.new_bib_note("2021", "smith"))
+        # can't make note outside zettl
+        self.assertEqual(file_actions.new_bib_note("2021", "smith"), None)
         os.chdir(file_actions.safe_init())
         path = file_actions.new_bib_note("2021", "daniels")
+        # note exists and is name correctly
         self.assertEqual(path, f"{file_actions.BIB}/2021daniels.md")
         self.assertTrue(os.path.exists(path))
+        # can't make duplicate note
         self.assertFalse(file_actions.new_bib_note("2021", "daniels"))
 
     @clean_up
     def test_zettl_note(self):
-        with self.assertRaises(OSError):
-            self.assertFalse(file_actions.new_zettl_note(1,2,3,4,5))
+        # can't make note without zettl
+        self.assertEqual(file_actions.new_zettl_note(1,2,3,4,5), None)
         os.chdir(file_actions.safe_init())
         path = file_actions.new_zettl_note(1,2,3,4)
         self.assertEqual(path, f"{file_actions.ZETTL}/1-2-3-4.md")
         self.assertTrue(os.path.exists(path))
-        with self.assertRaises(ValueError):
-            file_actions.new_zettl_note(1,2,3,4)
-        with self.assertRaises(ValueError):
-            file_actions.new_zettl_note("1","2",3,4)
+        # can't make duplicate note
+        self.assertEqual(file_actions.new_zettl_note(1,2,3,4),None)
+        # invalid note name
+        self.assertEqual(file_actions.new_zettl_note("1","2",3,4), None)
 
 

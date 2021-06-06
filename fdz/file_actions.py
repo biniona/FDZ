@@ -3,7 +3,7 @@ import os
 
 from functools import wraps
 from datetime import date
-from fdz.templates import DAILY_TMPL, BIB_TMPL, ZETTL_TMPL, SETTINGS_TMPL
+from fdz.templates import DAILY_TMPL, BIB_TMPL, ZETTL_TMPL, SETTINGS_TMPL, OPEN_CMD
 
 INIT_FILE = ".fdzrc.json"
 DAILY = "daily"
@@ -55,7 +55,7 @@ def safe_init(zettl_dir_name = None):
     if not zettl_dir_name:
         zettl_dir_name = DEFAULT_DIR_STRUCTURE[NAME]
     if os.path.exists(zettl_dir_name):
-        return False
+        return zettl_dir_name
     os.mkdir(zettl_dir_name)
     for k,v in DEFAULT_DIR_STRUCTURE[CONTENTS].items():
         new_dir_name = k
@@ -75,7 +75,7 @@ def new_daily_note():
     today_str = date.today().strftime("%Y%m%d")
     new_path = make_path(".md", DAILY, today_str)
     if os.path.exists(new_path):
-        return False
+        return new_path
     _make_file(new_path, DAILY_TMPL(today_str))
     return new_path
 
@@ -103,3 +103,12 @@ def new_zettl_note(*delimiters):
         return
     _make_file(new_note, ZETTL_TMPL(str_delimiters))
     return new_note
+
+@check_is_init
+def open_file(path):
+    with open(INIT_FILE, "r") as f:
+        settings = json.load(f)
+        open_cmd = settings.get(OPEN_CMD)
+        system_cmd = f"{open_cmd} {path}"
+        os.system(system_cmd)
+

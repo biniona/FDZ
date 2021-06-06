@@ -20,8 +20,10 @@ BIB_TMPL = lambda author, date_str, extra : f"""# {date_str}{author}{extra}
 
 """
 
+OPEN_CMD = "open_command"
+
 _setting_dict = {
-	"open_command" : None,
+	OPEN_CMD : "vim",
 	"home_directory" : None
 }
 
