@@ -13,7 +13,7 @@ def cli(ctx):
 def init(name = None):
     """Initialize your zettelkesten directory."""
     path = fa.safe_init(name)
-    click.echo(f"New zettl: {path}")
+    click.echo(path)
     return path
 
 @cli.command(name = "d")
@@ -49,11 +49,13 @@ def open(ctx):
     if ctx.obj.get('PATH'):
         fa.open_file(ctx.obj['PATH'])
     elif ctx.obj.get("ABORT_OPEN"):
+        # fail silently, if this is set something earlier should give appropriate message
         return
     else:
         click.echo("No path specified. HINT: This command is intended to be used with file creation commands.")
 
 def _file_creation_helper(ctx, path):
+    """Helper for file creation events. Handles aborting the open command and setting path."""
     if path:
         click.echo(path)
         ctx.obj["PATH"] = path

@@ -12,9 +12,10 @@ ZETTL = "zettelkesten"
 SETTINGS = "settings"
 NAME = "name"
 CONTENTS = "contents"
+DEFAULT_ZETTL_NAME = "zettl"
 
 DEFAULT_DIR_STRUCTURE = {
-        NAME:"zettl",
+        NAME: DEFAULT_ZETTL_NAME,
         CONTENTS:{
             ZETTL : {"type":"directory"},
             BIB : {"type":"directory"},
