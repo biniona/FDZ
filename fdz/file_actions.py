@@ -13,6 +13,7 @@ SETTINGS = "settings"
 NAME = "name"
 CONTENTS = "contents"
 DEFAULT_ZETTL_NAME = "zettl"
+ZETTL_ENV_VAR = "FDZ_ZETTL_PATH"
 
 DEFAULT_DIR_STRUCTURE = {
         NAME: DEFAULT_ZETTL_NAME,
@@ -36,15 +37,27 @@ def _make_file(file_name, template):
         f.write(template)
 
 def is_init():
+    path = os.getcwd()
     if os.path.exists(INIT_FILE):
-        return True
-    return False
+        #check local directory
+        return True, path
+    if os.getenv(ZETTL_ENV_VAR):
+        # check directory of environment variable
+        zettl_path = os.getenv(ZETTL_ENV_VAR)
+        if os.path.exists(f"{zettl_path}/{INIT_FILE}"):
+            return True, zettl_path
+    return False, None
 
 def check_is_init(func):
     @wraps(func)
     def wrapper(*args,**kwargs):
-        if is_init():
+        is_init_result, path = is_init()
+        if is_init_result:
+            current_directory = os.getcwd()
+            # navigate to the zettlekesten
+            os.chdir(path)
             result = func(*args, **kwargs)
+            os.chdir(current_directory)
             return result
         else:
             print("Need to initialize your zettlekesten directory.")
@@ -53,8 +66,13 @@ def check_is_init(func):
 
 def safe_init(zettl_dir_name = None):
     """initialize your zettlekesten directory."""
+    is_init_result, path = is_init()
+    if is_init_result:
+        return path
     if not zettl_dir_name:
         zettl_dir_name = DEFAULT_DIR_STRUCTURE[NAME]
+    # full path of zettelkesten
+    zettl_dir_name = f"{os.getcwd()}/{zettl_dir_name}"
     if os.path.exists(zettl_dir_name):
         return zettl_dir_name
     os.mkdir(zettl_dir_name)

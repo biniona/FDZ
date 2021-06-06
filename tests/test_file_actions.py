@@ -36,10 +36,10 @@ class TestFileActions(unittest.TestCase):
     
     @clean_up
     def test_is_init(self):
-        self.assertFalse(file_actions.is_init())
+        self.assertEqual(file_actions.is_init(), (False, None))
         path = file_actions.safe_init()
         os.chdir(path)
-        self.assertTrue(file_actions.is_init())
+        self.assertTrue(file_actions.is_init(), (True, "."))
 
     def test_make_path(self):
         self.assertEqual(file_actions.make_path(".txt", "1","2","3"), "1/2/3.txt")

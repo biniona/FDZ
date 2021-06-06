@@ -17,12 +17,6 @@ from fdz import file_actions as fa
 class TestFdz(unittest.TestCase):
     """Tests for `fdz` package."""
 
-    def setUp(self):
-        """Set up test fixtures, if any."""
-
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-
     @clean_up
     def test_i(self):
         """Test init command"""
