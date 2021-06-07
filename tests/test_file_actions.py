@@ -42,8 +42,8 @@ class TestFileActions(unittest.TestCase):
         self.assertTrue(file_actions.is_init(), (True, "."))
 
     def test_make_path(self):
-        self.assertEqual(file_actions.make_path(".txt", "1","2","3"), "1/2/3.txt")
-        self.assertEqual(file_actions.make_path("","1"),"1")
+        self.assertEqual(file_actions._make_path(".txt", "1","2","3"), "1/2/3.txt")
+        self.assertEqual(file_actions._make_path("","1"),"1")
 
     @clean_up
     def test_date(self):

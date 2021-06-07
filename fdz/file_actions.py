@@ -1,3 +1,5 @@
+"""Module for holding OS file actions for fdz."""
+
 import json
 import os
 
@@ -27,7 +29,7 @@ DEFAULT_DIR_STRUCTURE = {
     }
 
 
-def make_path(ext, *p):
+def _make_path(ext, *p):
     path = ('/'.join(p))
     if ext:
         path += ext
@@ -56,7 +58,8 @@ def is_init():
                 return True, zettl_path
     return False, None
 
-def check_is_init(func):
+def _check_is_init(func):
+    """checks if a zettekesten exists and navigates os to is"""
     @wraps(func)
     def wrapper(*args,**kwargs):
         is_init_result, path = is_init()
@@ -102,25 +105,28 @@ def safe_init(zettl_dir_name = None, set_home_config = True, force = False):
         _make_file(HOME_CONFIG_FILE, t.HOME_CONFIG_TMPL(zettl_dir_name))
     return zettl_dir_name    
 
-@check_is_init
+@_check_is_init
 def new_daily_note():
+    """make a new daily note"""
     today_str = date.today().strftime("%Y%m%d")
-    new_path = make_path(".md", DAILY, today_str)
+    new_path = _make_path(".md", DAILY, today_str)
     if os.path.exists(new_path):
         return new_path
     _make_file(new_path, t.DAILY_TMPL(today_str))
     return new_path
 
-@check_is_init
+@_check_is_init
 def new_bib_note(pub_date, author, extra = ""):
-    new_note = make_path(".md", BIB, f"{pub_date}{author}{extra}")
+    """make a new bibliographic note"""
+    new_note = _make_path(".md", BIB, f"{pub_date}{author}{extra}")
     if os.path.exists(new_note):
         return False
     _make_file(new_note, t.BIB_TMPL(pub_date, author, extra))
     return new_note
 
-@check_is_init
+@_check_is_init
 def new_zettl_note(*delimiters):
+    """make a new zettelkestan note"""
     for x in delimiters:
         try:
             int(x)
@@ -129,18 +135,17 @@ def new_zettl_note(*delimiters):
             return
     str_delimiters = [str(d) for d in delimiters]
     note = "-".join(str_delimiters)
-    new_note = make_path(".md", ZETTL, note)
+    new_note = _make_path(".md", ZETTL, note)
     if os.path.exists(new_note):
         print("This note already exists. Pick a new note")
         return
     _make_file(new_note, t.ZETTL_TMPL(str_delimiters))
     return new_note
 
-@check_is_init
+@_check_is_init
 def open_file(path):
     with open(INIT_FILE, "r") as f:
         settings = json.load(f)
         open_cmd = settings.get(t.OPEN_CMD)
         system_cmd = f"{open_cmd} {path}"
         os.system(system_cmd)
-
