@@ -11,16 +11,13 @@ def cli(ctx):
 
 @cli.command(name = "i")
 @click.option('--name','-n', 'name', required=False, type=str)
-def init(name = None):
+@click.option('--dont-set-home','-d', 'dont_set_home', is_flag=True)
+@click.option('--force','-f', 'force', is_flag=True)
+def init(name = None, dont_set_home = False, force = False):
     """Initialize your zettelkesten directory."""
-    path = fa.safe_init(name)
+    set_home = not dont_set_home
+    path = fa.safe_init(name, set_home, force)
     click.echo(path)
-    if os.getenv(fa.ZETTL_ENV_VAR):
-        cur_zettl_path = os.getenv(fa.ZETTL_ENV_VAR)
-        if cur_zettl_path != path:
-            click.echo(f"Update your {fa.ZETTL_ENV_VAR} environment variable to {path} in your shell's initialization file")
-    else:
-        click.echo(f"Set the {fa.ZETTL_ENV_VAR} environement variable to {path} in your shell's initialization file")
     return path
 
 @cli.command(name = "d")

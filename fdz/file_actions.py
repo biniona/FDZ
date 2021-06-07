@@ -3,7 +3,7 @@ import os
 
 from functools import wraps
 from datetime import date
-from fdz.templates import DAILY_TMPL, BIB_TMPL, ZETTL_TMPL, SETTINGS_TMPL, OPEN_CMD
+import fdz.templates as t
 
 INIT_FILE = ".fdzrc.json"
 DAILY = "daily"
@@ -14,6 +14,7 @@ NAME = "name"
 CONTENTS = "contents"
 DEFAULT_ZETTL_NAME = "zettl"
 ZETTL_ENV_VAR = "FDZ_ZETTL_PATH"
+HOME_CONFIG_FILE = f"{os.path.expanduser('~')}/.fdz.json"
 
 DEFAULT_DIR_STRUCTURE = {
         NAME: DEFAULT_ZETTL_NAME,
@@ -46,6 +47,13 @@ def is_init():
         zettl_path = os.getenv(ZETTL_ENV_VAR)
         if os.path.exists(f"{zettl_path}/{INIT_FILE}"):
             return True, zettl_path
+    if os.path.exists(HOME_CONFIG_FILE):
+        # check config file in home directory
+        with open(HOME_CONFIG_FILE, "r") as f:
+            home_conf_dict = json.load(f)
+            zettl_path = home_conf_dict.get(t.ZETTL_PATH)
+            if zettl_path and os.path.exists(f"{zettl_path}/{INIT_FILE}"):
+                return True, zettl_path
     return False, None
 
 def check_is_init(func):
@@ -64,11 +72,13 @@ def check_is_init(func):
             #raise OSError("Direcory Not Initialized")
     return wrapper
 
-def safe_init(zettl_dir_name = None):
+def safe_init(zettl_dir_name = None, set_home_config = True, force = False):
     """initialize your zettlekesten directory."""
-    is_init_result, path = is_init()
-    if is_init_result:
-        return path
+    if not force:
+        # check to see if a zettelkesten already exists
+        is_init_result, path = is_init()
+        if is_init_result:
+            return path
     if not zettl_dir_name:
         zettl_dir_name = DEFAULT_DIR_STRUCTURE[NAME]
     # full path of zettelkesten
@@ -84,9 +94,12 @@ def safe_init(zettl_dir_name = None):
         if v["type"] == "directory":
             os.mkdir(new_file_name)
         elif v["type"] == "settings":
-            _make_file(new_file_name, SETTINGS_TMPL)
+            _make_file(new_file_name, t.SETTINGS_TMPL)
         else:
             raise ValueError(f"Invalid type {v['Type']} for {new_file_name}")
+    if set_home_config:
+        # update the home config file
+        _make_file(HOME_CONFIG_FILE, t.HOME_CONFIG_TMPL(zettl_dir_name))
     return zettl_dir_name    
 
 @check_is_init
@@ -95,7 +108,7 @@ def new_daily_note():
     new_path = make_path(".md", DAILY, today_str)
     if os.path.exists(new_path):
         return new_path
-    _make_file(new_path, DAILY_TMPL(today_str))
+    _make_file(new_path, t.DAILY_TMPL(today_str))
     return new_path
 
 @check_is_init
@@ -103,7 +116,7 @@ def new_bib_note(pub_date, author, extra = ""):
     new_note = make_path(".md", BIB, f"{pub_date}{author}{extra}")
     if os.path.exists(new_note):
         return False
-    _make_file(new_note, BIB_TMPL(pub_date, author, extra))
+    _make_file(new_note, t.BIB_TMPL(pub_date, author, extra))
     return new_note
 
 @check_is_init
@@ -120,14 +133,14 @@ def new_zettl_note(*delimiters):
     if os.path.exists(new_note):
         print("This note already exists. Pick a new note")
         return
-    _make_file(new_note, ZETTL_TMPL(str_delimiters))
+    _make_file(new_note, t.ZETTL_TMPL(str_delimiters))
     return new_note
 
 @check_is_init
 def open_file(path):
     with open(INIT_FILE, "r") as f:
         settings = json.load(f)
-        open_cmd = settings.get(OPEN_CMD)
+        open_cmd = settings.get(t.OPEN_CMD)
         system_cmd = f"{open_cmd} {path}"
         os.system(system_cmd)
 

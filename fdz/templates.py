@@ -28,3 +28,9 @@ _setting_dict = {
 }
 
 SETTINGS_TMPL = json.dumps(_setting_dict,indent=1)
+
+ZETTL_PATH = "path"
+
+_home_config_dict =lambda path:  { ZETTL_PATH : path}
+
+HOME_CONFIG_TMPL = lambda path : json.dumps(_home_config_dict(path),indent=1)

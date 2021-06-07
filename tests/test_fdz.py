@@ -21,7 +21,7 @@ class TestFdz(unittest.TestCase):
     def test_i(self):
         """Test init command"""
         runner = CliRunner()
-        z_result = runner.invoke(cli.cli, ['i'])
+        z_result = runner.invoke(cli.cli, ['i','-d','-f'])
         assert z_result.exit_code == 0
         assert fa.DEFAULT_ZETTL_NAME in z_result.output
 
@@ -29,7 +29,7 @@ class TestFdz(unittest.TestCase):
     def test_d(self):
         """Test daily command"""
         runner = CliRunner()
-        i_result = runner.invoke(cli.cli, ['i'])
+        i_result = runner.invoke(cli.cli, ['i','-d','-f'])
         os.chdir(fa.DEFAULT_ZETTL_NAME)
         d_result = runner.invoke(cli.cli, ['d'])
         assert d_result.exit_code == 0
