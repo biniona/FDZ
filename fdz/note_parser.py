@@ -82,6 +82,11 @@ def t_error(t):
 import ply.lex as lex
 lex.lex()
 
+# helpful contants for spell checking
+SECTION = 'section'
+DELIMITER = 'delimiter'
+TEXT_SECTION = 'text'
+
 # dictionary of names (for storing variables)
 names = { }
 
@@ -96,9 +101,14 @@ def p_statement_start(p):
     '''BLOCKS : BLOCK
               | BLOCKS BLOCK'''
     if len(p) == 2:
-        p[0] = [p[1]]
+        if p[1]:
+            p[0] = [p[1]]
+        else:
+            p[0] = []
     else:
-        p[1].append(p[2])
+        # check if block is empty
+        if p[2]:
+            p[1].append(p[2])
         p[0] = p[1].copy()
 
 def p_statement_block(p):
@@ -106,19 +116,19 @@ def p_statement_block(p):
              | TEXT
              | EXPR'''
     if len(p) == 3:
-        p[0] = (p[1], p[2])
+        p[0] = {**p[1], **{TEXT_SECTION:p[2]}}
     else:
         # anything without 
         # both an expression and text is considered empty
-        p[0] = (None, None)
+        p[0] = None
 
 def p_statement_expr(p):
     '''EXPR : LCOMMENT SECTION RCOMMENT
             | LCOMMENT SECTION DELIMITER DELIMSTRING RCOMMENT'''
-    if len(p) == 5:
-        p[0] = {'section':p[2],'delimiter':p[4]}
+    if len(p) == 6:
+        p[0] = {SECTION:p[2],DELIMITER:p[4]}
     else:
-        p[0] = p[2]
+        p[0] = {SECTION:p[2]}
 
 def p_statement_text(p):
     '''TEXT : COMMENTLINE
