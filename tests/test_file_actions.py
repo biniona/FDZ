@@ -9,7 +9,12 @@ import unittest
 
 from fdz import fdz
 from fdz import file_actions
-from tests import clean_up
+from tests import clean_up, TEST_FILE_EVENTS_DIR
+
+# this line overrides where file actions will look for an exiting zettl.
+# this is useful if you want to test the app and already have a zettl on
+# your computer.
+file_actions.HOME_CONFIG_FILE = f"{os.getcwd()}/{TEST_FILE_EVENTS_DIR}/.fdz.json"
 
 class TestFileActions(unittest.TestCase):
     """Tests for `fdz.fileactions` functions."""
@@ -78,5 +83,4 @@ class TestFileActions(unittest.TestCase):
         self.assertEqual(file_actions.new_zettl_note(1,2,3,4),None)
         # invalid note name
         self.assertEqual(file_actions.new_zettl_note("1","2",3,4), None)
-
 
