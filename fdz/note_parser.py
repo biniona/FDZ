@@ -15,7 +15,7 @@ sections = {
 }
 
 keywords = {
-    'delimiter':'DELIMITER'
+    'delim':'DELIMITER'
 }
 
 # combine sections and keywords into reserved words
@@ -25,12 +25,19 @@ states = (
    ('comment','exclusive'),
 )
 
-tokens = ['LINE','LCOMMENT','RCOMMENT','NUMBER','ID'] + list(reserved.values())
+tokens = ['COMMENTLINE','FULLLINE','LCOMMENT','RCOMMENT','NUMBER', 'DELIMSTRING','ID'] + list(reserved.values())
 
-t_LINE = r'[^<]+'
+t_COMMENTLINE = r'.+?(?=<.*>)'
+t_FULLLINE = r'.+'
 
+def t_comment_DELIMSTRING(t):
+    r'".+"'
+    t.value = t.value.replace('"', '')
+    return t
+
+# the language exists in mark down comments
 def t_LCOMMENT(t):
-    r'<'
+    r'<(?=.*>)'
     t.lexer.begin('comment')
     return t
 
@@ -96,24 +103,33 @@ def p_statement_start(p):
 
 def p_statement_block(p):
     '''BLOCK : EXPR TEXT
-             | TEXT'''
+             | TEXT
+             | EXPR'''
     if len(p) == 3:
         p[0] = (p[1], p[2])
     else:
-        p[0] = (None, p[1])
+        # anything without 
+        # both an expression and text is considered empty
+        p[0] = (None, None)
 
 def p_statement_expr(p):
-    '''EXPR : LCOMMENT SECTION RCOMMENT'''
-    p[0] = p[2]
+    '''EXPR : LCOMMENT SECTION RCOMMENT
+            | LCOMMENT SECTION DELIMITER DELIMSTRING RCOMMENT'''
+    if len(p) == 5:
+        p[0] = {'section':p[2],'delimiter':p[4]}
+    else:
+        p[0] = p[2]
 
 def p_statement_text(p):
-    '''TEXT : LINE
-            | TEXT LINE'''
+    '''TEXT : COMMENTLINE
+            | FULLLINE
+            | TEXT COMMENTLINE
+            | TEXT FULLLINE'''
     if len(p) == 2:
         p[0] = [p[1]]
     else:
-        p[2].append(p[1])
-        p[0] = p[2].copy()
+        p[1].append(p[2])
+        p[0] = p[1].copy()
 
 def p_statement_section(p):
     '''SECTION : TITLE
