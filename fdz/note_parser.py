@@ -87,6 +87,8 @@ SECTION = 'section'
 DELIMITER = 'delimiter'
 TEXT_SECTION = 'text'
 
+strip_md_headers = lambda s : s.strip('\t# ')
+
 # dictionary of names (for storing variables)
 names = { }
 
@@ -136,9 +138,9 @@ def p_statement_text(p):
             | TEXT COMMENTLINE
             | TEXT FULLLINE'''
     if len(p) == 2:
-        p[0] = [p[1]]
+        p[0] = [strip_md_headers(p[1])]
     else:
-        p[1].append(p[2])
+        p[1].append(strip_md_headers(p[2]))
         p[0] = p[1].copy()
 
 def p_statement_section(p):
