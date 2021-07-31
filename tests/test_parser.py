@@ -2,9 +2,12 @@ import os
 import shutil
 
 import unittest
+import json
 
 from fdz import fdz
 from fdz.note_parser import parse_string
+
+SAMPLE_NOTES = "tests/sample_notes"
 
 class TestFileActions(unittest.TestCase):
     """Tests for `fdz.fileactions` functions."""
@@ -42,3 +45,21 @@ hello'''
         delim_parse = parse_string(delim_string)
         expected = [{'section':'title','delimiter':',','text':['hello']}]
         self.assertEqual(delim_parse,expected)
+
+    def test_strip_headers(self):
+        header_string='''<title> ### hello '''
+        header_parse=parse_string(header_string)
+        expected = [{'section':'title', 'text':['hello']}]
+        self.assertEqual(header_parse, expected)
+
+    def test_full_note(self):
+        full_note=None
+        parsed_note_sample=None
+        with open(f'{SAMPLE_NOTES}/zettl_1.md', 'r') as f:
+            full_note = f.read()
+        with open(f'{SAMPLE_NOTES}/zettl_1_parse.json', 'r') as fj:
+            parsed_note_sample = json.load(fj)
+        full_note_parse = parse_string(full_note)
+        print(full_note_parse)
+        self.assertEqual(full_note_parse, parsed_note_sample)
+
