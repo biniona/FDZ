@@ -12,6 +12,7 @@ sections = {
     'author':'AUTHOR',
     'year':'YEAR',
     'pages':'PAGES',
+    'meta':'META',
 }
 
 keywords = {
@@ -152,7 +153,8 @@ def p_statement_section(p):
                | KEYWORDS
                | AUTHOR
                | YEAR
-               | PAGES'''
+               | PAGES
+               | META'''
     p[0] = p[1]
 
 def p_error(p):
