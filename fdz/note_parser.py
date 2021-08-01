@@ -5,6 +5,7 @@
 comment_start = '<!--'
 comment_end = '-->'
 comment_regex = rf'{comment_start}(?=.*{comment_end})'
+comment_end_regex = rf'{comment_end}'
 
 sections = {
     'title':'TITLE',
@@ -48,8 +49,8 @@ def t_LCOMMENT(t):
     t.lexer.begin('comment')
     return t
 
+@TOKEN(comment_end_regex)
 def t_comment_RCOMMENT(t):
-    r'>'
     t.lexer.begin('INITIAL')
     return t
 
