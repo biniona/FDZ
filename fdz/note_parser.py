@@ -2,6 +2,11 @@
 # Note Language
 # -----------------------------------------------------------------------------
 
+comment_start = '<!--'
+comment_end = '-->'
+comment_regex = rf'{comment_start}(?=.*{comment_end})'
+comment_end_regex = rf'{comment_end}'
+
 sections = {
     'title':'TITLE',
     'content':'CONTENT',
@@ -12,6 +17,7 @@ sections = {
     'author':'AUTHOR',
     'year':'YEAR',
     'pages':'PAGES',
+    'meta':'META',
 }
 
 keywords = {
@@ -27,7 +33,7 @@ states = (
 
 tokens = ['COMMENTLINE','FULLLINE','LCOMMENT','RCOMMENT','NUMBER', 'DELIMSTRING','ID'] + list(reserved.values())
 
-t_COMMENTLINE = r'.+?(?=<.*>)'
+t_COMMENTLINE = rf'.+?(?={comment_start}.*{comment_end})'
 t_FULLLINE = r'.+'
 
 def t_comment_DELIMSTRING(t):
@@ -35,14 +41,16 @@ def t_comment_DELIMSTRING(t):
     t.value = t.value.replace('"', '')
     return t
 
+from ply.lex import TOKEN
+
 # the language exists in mark down comments
+@TOKEN(comment_regex)
 def t_LCOMMENT(t):
-    r'<(?=.*>)'
     t.lexer.begin('comment')
     return t
 
+@TOKEN(comment_end_regex)
 def t_comment_RCOMMENT(t):
-    r'>'
     t.lexer.begin('INITIAL')
     return t
 
@@ -87,6 +95,8 @@ SECTION = 'section'
 DELIMITER = 'delimiter'
 TEXT_SECTION = 'text'
 
+strip_md_headers = lambda s : s.strip('\t# ')
+
 # dictionary of names (for storing variables)
 names = { }
 
@@ -97,7 +107,7 @@ def p_statement_start(p):
     '''NOTE : BLOCKS'''
     p[0] = p[1]
 
-def p_statement_start(p):
+def p_statement_blocks(p):
     '''BLOCKS : BLOCK
               | BLOCKS BLOCK'''
     if len(p) == 2:
@@ -136,9 +146,9 @@ def p_statement_text(p):
             | TEXT COMMENTLINE
             | TEXT FULLLINE'''
     if len(p) == 2:
-        p[0] = [p[1]]
+        p[0] = [strip_md_headers(p[1])]
     else:
-        p[1].append(p[2])
+        p[1].append(strip_md_headers(p[2]))
         p[0] = p[1].copy()
 
 def p_statement_section(p):
@@ -150,7 +160,8 @@ def p_statement_section(p):
                | KEYWORDS
                | AUTHOR
                | YEAR
-               | PAGES'''
+               | PAGES
+               | META'''
     p[0] = p[1]
 
 def p_error(p):
