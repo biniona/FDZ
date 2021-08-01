@@ -134,12 +134,12 @@ def new_zettl_note(*delimiters):
             print("Invalid note name. Note must be numbers and periods.")
             return
     str_delimiters = [str(d) for d in delimiters]
-    note = "-".join(str_delimiters)
+    note = ".".join(str_delimiters)
     new_note = _make_path(".md", ZETTL, note)
     if os.path.exists(new_note):
         print("This note already exists. Pick a new note")
         return
-    _make_file(new_note, t.ZETTL_TMPL(str_delimiters))
+    _make_file(new_note, t.ZETTL_TMPL(note))
     return new_note
 
 @_check_is_init

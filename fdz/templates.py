@@ -5,13 +5,20 @@ DAILY_TMPL = lambda date_str : f"""# {date_str}
 
 """
 
-ZETTL_TMPL =  lambda title : f"""# {title}
+ZETTL_TMPL =  lambda title : f"""<!-- title ---->
+{title}
 
-## Notes
+<!-- content -->
 
+<!-- pages -->
 
+<!-- author -->
 
-## References
+<!-- keywords --> 
+
+<!-- friends delim "-" --> 
+
+<!-- meta -->
 
 """
 
