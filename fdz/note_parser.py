@@ -2,6 +2,10 @@
 # Note Language
 # -----------------------------------------------------------------------------
 
+comment_start = '<!--'
+comment_end = '-->'
+comment_regex = rf'{comment_start}(?=.*{comment_end})'
+
 sections = {
     'title':'TITLE',
     'content':'CONTENT',
@@ -28,7 +32,7 @@ states = (
 
 tokens = ['COMMENTLINE','FULLLINE','LCOMMENT','RCOMMENT','NUMBER', 'DELIMSTRING','ID'] + list(reserved.values())
 
-t_COMMENTLINE = r'.+?(?=<.*>)'
+t_COMMENTLINE = rf'.+?(?={comment_start}.*{comment_end})'
 t_FULLLINE = r'.+'
 
 def t_comment_DELIMSTRING(t):
@@ -36,9 +40,11 @@ def t_comment_DELIMSTRING(t):
     t.value = t.value.replace('"', '')
     return t
 
+from ply.lex import TOKEN
+
 # the language exists in mark down comments
+@TOKEN(comment_regex)
 def t_LCOMMENT(t):
-    r'<(?=.*>)'
     t.lexer.begin('comment')
     return t
 
@@ -100,7 +106,7 @@ def p_statement_start(p):
     '''NOTE : BLOCKS'''
     p[0] = p[1]
 
-def p_statement_start(p):
+def p_statement_blocks(p):
     '''BLOCKS : BLOCK
               | BLOCKS BLOCK'''
     if len(p) == 2:
