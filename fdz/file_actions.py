@@ -59,7 +59,7 @@ def is_init():
     return False, None
 
 def _check_is_init(func):
-    """checks if a zettekesten exists and navigates os to is"""
+    """checks if a zettekesten exists and navigates os to it"""
     @wraps(func)
     def wrapper(*args,**kwargs):
         is_init_result, path = is_init()
@@ -135,7 +135,9 @@ def new_zettl_note(*delimiters):
             return
     str_delimiters = [str(d) for d in delimiters]
     note = ".".join(str_delimiters)
-    new_note = _make_path(".md", ZETTL, note)
+    # give the filename hyphens as file names can't have multiple periods
+    file_name = "-".join(str_delimiters)
+    new_note = _make_path(".md", ZETTL, file_name)
     if os.path.exists(new_note):
         print("This note already exists. Pick a new note")
         return

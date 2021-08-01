@@ -1,10 +1,13 @@
 import json
 
+# daily notes are just for you
 DAILY_TMPL = lambda date_str : f"""# {date_str}
 
 
 """
 
+
+# zettelkesten notes are more structured, and can be understood by someone else.
 ZETTL_TMPL =  lambda title : f"""<!-- title ---->
 {title}
 
@@ -22,6 +25,7 @@ ZETTL_TMPL =  lambda title : f"""<!-- title ---->
 
 """
 
+# TODO: Describe bibliographic notes
 BIB_TMPL = lambda author, date_str, extra : f"""# {date_str}{author}{extra}
 
 
