@@ -8,23 +8,26 @@ interface lucas_map_type {
     [index: number]: number | number[];
 }
 
-/** Map to define how different cells effect one another in layout. */
+/** Map to define how different cells effect one another in layout.
+ * This ca be calculated, but that seemed unnecessary for the time being
+ * as the layout is not meant go mo
+ */
 const LEFT_SHIFT_MAP: lucas_map_type = {
     0: NaN,
     1: 0,
     2: [0, 3],
     3: 0,
     4: 0,
-    5: 0,
+    5: [0, 4],
 };
 
 const TOP_SHIFT_MAP: lucas_map_type = {
     0: NaN,
     1: 2,
     2: NaN,
-    3: 4,
-    4: 5,
-    5: NaN,
+    3: NaN,
+    4: 3,
+    5: 3,
 };
 
 const LucasNumber = (index: number) => {
@@ -89,6 +92,7 @@ const GetShiftTop = (index: number, num_cells: number) => {
     return count;
 };
 
+/** numbers into percent strings */
 const p = (n: number) => `${n * 100}%`;
 
 /** Given the number of cells and the current cell, describe the cell  */

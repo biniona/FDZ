@@ -7,8 +7,9 @@ function App() {
         { type: WindowTypes.Graph },
         { type: WindowTypes.Editor },
         { type: WindowTypes.Graph },
+        { type: WindowTypes.Editor },
         { type: WindowTypes.Graph },
-        { type: WindowTypes.Graph },
+        { type: WindowTypes.Editor },
     ];
     return (
         <div className="App">
