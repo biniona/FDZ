@@ -1,6 +1,7 @@
 import "./App.css";
 
 import { WindowManger, WindowContents, WindowTypes } from "./WindowManager";
+import { SideBar } from "./SideBar";
 
 function App() {
     const windows: WindowContents[] = [
@@ -12,7 +13,8 @@ function App() {
         { type: WindowTypes.Editor },
     ];
     return (
-        <div className="App">
+        <div id="AppDiv" className="App">
+            <SideBar />
             <WindowManger windows={windows} />
         </div>
     );

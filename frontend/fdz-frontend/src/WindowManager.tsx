@@ -10,7 +10,7 @@ export enum WindowTypes {
 }
 
 export const WindowManger = ({ windows }: { windows: WindowContents[] }) => (
-    <div>
+    <div id="WindowManger">
         {windows.map((value, i) => (
             <div key={i}>
                 <Window content={value} index={i} length={windows.length} />
@@ -29,9 +29,9 @@ const Window = ({
     length: number;
 }) => (
     <div
+        className="Window"
         style={{
             position: "absolute",
-            border: "1px solid black",
             ...GetDimensions(index, length),
         }}
     >
