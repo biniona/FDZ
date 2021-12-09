@@ -3,7 +3,8 @@ import { getEditor } from "../Components/editor/editor";
 import { Card } from "../Model";
 import { GetSearchComponent } from "../Components/search/search";
 import { WindowActions } from "./WindowActions";
-import { NewOrReplaceOverlay } from "./Overlay/NewOrReplaceOverlay";
+
+export type Overlay = JSX.Element | null;
 
 export type WindowContents = {
     id: number;
@@ -19,21 +20,18 @@ export enum WindowTypes {
 
 export const WindowManger = ({
     windowActions,
-    overlaid,
+    overlay,
 }: {
     windowActions: WindowActions;
-    overlaid: boolean;
+    overlay: JSX.Element | null;
 }) => {
-    let overlay: JSX.Element = <div />;
-    if (overlaid === true) {
-        overlay = NewOrReplaceOverlay(
-            { id: 1, type: WindowTypes.Editor, card: null },
-            windowActions
-        );
+    let overlay_ = <div />;
+    if (overlay !== null) {
+        overlay_ = overlay;
     }
     return (
         <div id="WindowManagerSizer">
-            {overlay}
+            {overlay_}
             <div id="WindowManger">
                 {windowActions.windows.map((value, i) => (
                     <div key={i}>

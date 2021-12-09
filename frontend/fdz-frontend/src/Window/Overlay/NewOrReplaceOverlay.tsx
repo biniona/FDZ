@@ -11,14 +11,13 @@ export const NewOrReplaceOverlay = (
     return (
         <div id="WindowOverlay">
             {windowRange.map((i) => {
-                const removeButton = (
+                const replaceButton = (
                     <a
                         onClick={() => {
                             windowActions.replaceWindow(i, windowContent);
                         }}
                     >
-                        {" "}
-                        Replace{" "}
+                        Replace
                     </a>
                 );
                 const addButton = (
@@ -30,7 +29,7 @@ export const NewOrReplaceOverlay = (
                         Add
                     </a>
                 );
-                let changeButton = removeButton;
+                let changeButton = replaceButton;
                 if (i === windowRange.length - 1) {
                     changeButton = addButton;
                 }
