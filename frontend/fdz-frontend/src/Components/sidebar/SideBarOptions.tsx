@@ -9,12 +9,20 @@ import {
 export const NewOrReplaceEditor = (
     overlay: Overlay,
     setOverlay: React.Dispatch<any>,
-    windowActions: WindowActions
+    windowActions: WindowActions,
+    setWindows: React.Dispatch<any>
 ) => (
     <a
         onClick={() => {
             if (overlay === null) {
-                setOverlay(NewOrReplaceOverlay(defaultEditor, windowActions));
+                setOverlay(
+                    NewOrReplaceOverlay(
+                        defaultEditor,
+                        windowActions,
+                        setWindows,
+                        setOverlay
+                    )
+                );
             } else {
                 setOverlay(null);
             }
@@ -27,12 +35,20 @@ export const NewOrReplaceEditor = (
 export const NewOrReplaceSearch = (
     overlay: Overlay,
     setOverlay: React.Dispatch<any>,
-    windowActions: WindowActions
+    windowActions: WindowActions,
+    setWindows: React.Dispatch<any>
 ) => (
     <a
         onClick={() => {
             if (overlay === null) {
-                setOverlay(NewOrReplaceOverlay(defaultSearch, windowActions));
+                setOverlay(
+                    NewOrReplaceOverlay(
+                        defaultSearch,
+                        windowActions,
+                        setWindows,
+                        setOverlay
+                    )
+                );
             } else {
                 setOverlay(null);
             }

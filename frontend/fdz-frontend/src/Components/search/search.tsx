@@ -7,8 +7,8 @@ export const GetSearchComponent = () => {
     if (previewCard !== null) {
         preview = GetPreviewDisplay(previewCard);
     }
-    const searchItems = CardModel.map((c: Card) =>
-        GetSearchResult(c, setPreviewCard)
+    const searchItems = CardModel.map((c: Card, i: number) =>
+        GetSearchResult(c, setPreviewCard, i)
     );
     return (
         <div>
@@ -30,13 +30,17 @@ const GetPreviewDisplay = (card: Card) => {
     );
 };
 
-const GetSearchResult = (card: Card, setPreviewCard: React.Dispatch<any>) => {
+const GetSearchResult = (
+    card: Card,
+    setPreviewCard: React.Dispatch<any>,
+    key: number
+) => {
     if (card === null) {
         return <li>Null Card</li>;
     }
 
     return (
-        <li key={String(card.id)}>
+        <li key={key}>
             <a
                 onClick={() => setPreviewCard(card)}
             >{`${card.id} ${card.type}`}</a>

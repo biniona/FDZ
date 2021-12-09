@@ -1,37 +1,28 @@
 import { WindowContents, WindowTypes } from "../WindowManager";
 import { WindowActions } from "../WindowActions";
 import { GetDimensions } from "../LucasNumber";
+import React from "react";
 
 export const NewOrReplaceOverlay = (
-    windowContent: WindowContents,
-    windowActions: WindowActions
+    newWindow: WindowContents,
+    windowActions: WindowActions,
+    setWindows: React.Dispatch<any>,
+    setOverlay: React.Dispatch<any>
 ) => {
     const numWindows = windowActions.windows.length + 1;
     const windowRange = Array.from({ length: numWindows }, (x, i) => i);
     return (
         <div id="WindowOverlay">
             {windowRange.map((i) => {
-                const replaceButton = (
-                    <a
-                        onClick={() => {
-                            windowActions.replaceWindow(i, windowContent);
-                        }}
-                    >
-                        Replace
-                    </a>
-                );
-                const addButton = (
-                    <a
-                        onClick={() =>
-                            windowActions.appendWindow(windowContent)
-                        }
-                    >
-                        Add
-                    </a>
-                );
-                let changeButton = replaceButton;
+                let changeButton = replaceButton(() => {
+                    setWindows(windowActions.replaceWindow(i, newWindow));
+                    setOverlay(null);
+                });
                 if (i === windowRange.length - 1) {
-                    changeButton = addButton;
+                    changeButton = addButton(() => {
+                        setWindows(windowActions.appendWindow(newWindow));
+                        setOverlay(null);
+                    });
                 }
                 return (
                     <div key={`overlay-${i}`}>
@@ -54,3 +45,10 @@ export const NewOrReplaceOverlay = (
         </div>
     );
 };
+
+const replaceButton = (onClick: React.Dispatch<any>) => (
+    <a onClick={onClick}>Replace</a>
+);
+const addButton = (onClick: React.Dispatch<any>) => (
+    <a onClick={onClick}>Add</a>
+);

@@ -25,10 +25,10 @@ const App = () => {
     const [overlay, setOverlay]: [Overlay, React.Dispatch<any>] =
         useState(null);
     const [windows, setWindows] = useState(defaultWindows);
-    const windowActions = new WindowActions(windows, setWindows);
+    const windowActions = new WindowActions(windows);
     const SidebarOptions = [
-        NewOrReplaceEditor(overlay, setOverlay, windowActions),
-        NewOrReplaceSearch(overlay, setOverlay, windowActions),
+        NewOrReplaceEditor(overlay, setOverlay, windowActions, setWindows),
+        NewOrReplaceSearch(overlay, setOverlay, windowActions, setWindows),
     ];
     return (
         <div id="AppDiv" className="App">
