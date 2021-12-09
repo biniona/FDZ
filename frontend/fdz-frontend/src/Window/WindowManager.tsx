@@ -1,9 +1,12 @@
 import { GetDimensions } from "./LucasNumber";
-import { getEditor } from "./Components/editor/editor";
-import { Card } from "./Model";
-import { getSearchComponent } from "./Components/search/search";
+import { getEditor } from "../Components/editor/editor";
+import { Card } from "../Model";
+import { GetSearchComponent } from "../Components/search/search";
+import { WindowActions } from "./WindowActions";
+import { NewOrReplaceOverlay } from "./Overlay/NewOrReplaceOverlay";
 
 export type WindowContents = {
+    id: number;
     type: WindowTypes;
     card: Card;
 };
@@ -15,56 +18,33 @@ export enum WindowTypes {
 }
 
 export const WindowManger = ({
-    windows,
+    windowActions,
     overlaid,
 }: {
-    windows: WindowContents[];
+    windowActions: WindowActions;
     overlaid: boolean;
 }) => {
     let overlay: JSX.Element = <div />;
     if (overlaid === true) {
-        overlay = WindowOverlay(windows.length);
+        overlay = NewOrReplaceOverlay(
+            { id: 1, type: WindowTypes.Editor, card: null },
+            windowActions
+        );
     }
     return (
         <div id="WindowManagerSizer">
             {overlay}
             <div id="WindowManger">
-                {windows.map((value, i) => (
+                {windowActions.windows.map((value, i) => (
                     <div key={i}>
                         <Window
                             content={value}
                             index={i}
-                            length={windows.length}
+                            length={windowActions.windows.length}
                         />
                     </div>
                 ))}
             </div>
-        </div>
-    );
-};
-
-export const WindowOverlay = (currNumWindows: number) => {
-    const numWindows = currNumWindows + 1;
-    const windowRange = Array.from({ length: numWindows }, (x, i) => i);
-    return (
-        <div id="WindowOverlay">
-            {windowRange.map((i) => (
-                <div key={`overlay-${i}`}>
-                    <div
-                        className="OverlayPane"
-                        style={{
-                            backgroundColor: "rgba(0, 0, 0, 0.1)",
-                            zIndex: 1,
-                            border: "dashed navy",
-                            position: "absolute",
-                            overflow: "auto",
-                            ...GetDimensions(i, numWindows),
-                        }}
-                    >
-                        <a>Remove</a>
-                    </div>
-                </div>
-            ))}
         </div>
     );
 };
@@ -98,7 +78,7 @@ const GetContent = (content: WindowContents) => {
         case WindowTypes.Editor:
             return getEditor(content.card);
         case WindowTypes.Search:
-            return getSearchComponent();
+            return GetSearchComponent();
         default:
             return DefaultComponent(content.type.toString());
     }

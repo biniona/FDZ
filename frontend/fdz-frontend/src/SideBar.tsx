@@ -1,6 +1,6 @@
-export const SideBar = () => (
+export const SideBar = ({ components }: { components: [JSX.Element] }) => (
     <div id="SideBar">
-        <p> SideBar </p>
-        <a> Overlay </a>
+        <h2> SideBar </h2>
+        {components.map((c) => c)}
     </div>
 );

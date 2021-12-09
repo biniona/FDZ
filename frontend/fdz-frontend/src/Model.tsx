@@ -1,16 +1,16 @@
-type Note = {
-    title: String;
+interface Content {
     content: String;
-};
+}
 
-type Bib = {
+interface Note extends Content {
     title: String;
-    content: String;
-};
+}
 
-type Scratch = {
-    content: String;
-};
+interface Bib extends Content {
+    title: String;
+}
+
+interface Scratch extends Content {}
 
 export enum CardTypes {
     Note = "Note",
@@ -36,45 +36,6 @@ const testCard: Card = {
 };
 
 export const CardModel: Cards = [
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
     testCard,
     testCard,
     testCard,

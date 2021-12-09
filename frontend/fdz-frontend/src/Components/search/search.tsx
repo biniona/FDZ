@@ -1,16 +1,36 @@
 import { Card, CardModel } from "../../Model";
+import React, { useState } from "react";
 
-export const getSearchComponent = () => {
-    const searchItems = CardModel.map((c: Card) => getSearchResult(c));
+export const GetSearchComponent = () => {
+    const [previewCard, setPreviewCard] = useState(null);
+    let preview = <div />;
+    if (previewCard !== null) {
+        preview = GetPreviewDisplay(previewCard);
+    }
+    const searchItems = CardModel.map((c: Card) =>
+        GetSearchResult(c, setPreviewCard)
+    );
     return (
         <div>
             <h2>Search</h2>
             <ul> {searchItems} </ul>
+            {preview}
         </div>
     );
 };
 
-const getSearchResult = (card: Card) => {
+const GetPreviewDisplay = (card: Card) => {
+    if (card === null) {
+        return <div />;
+    }
+    return (
+        <div>
+            <p>{card.content.content}</p>
+        </div>
+    );
+};
+
+const GetSearchResult = (card: Card, setPreviewCard: React.Dispatch<any>) => {
     if (card === null) {
         return <li>Null Card</li>;
     }
@@ -18,12 +38,8 @@ const getSearchResult = (card: Card) => {
     return (
         <li key={String(card.id)}>
             <a
-                onClick={() => displayContent(String(card.id))}
+                onClick={() => setPreviewCard(card)}
             >{`${card.id} ${card.type}`}</a>
         </li>
     );
-};
-
-const displayContent = (message: string) => {
-    console.log(message);
 };
