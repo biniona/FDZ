@@ -9,6 +9,9 @@ export const getEditor = (card: Card) => {
     }
     switch (card.type) {
         case CardTypes.Note:
+            if (card.content !== null) {
+                return loadNote(String(card.content.content));
+            }
             return getNewNote();
         case CardTypes.Bib:
             return getNewBib();
@@ -24,3 +27,5 @@ const getNewNote = () => <Editor defaultValue={noteTmpl} />;
 const getNewBib = () => <Editor defaultValue={bibTmpl} />;
 
 const getNewScratch = () => <Editor defaultValue="Write whatever you want!" />;
+
+const loadNote = (content: string) => <Editor defaultValue={content} />;

@@ -12,6 +12,7 @@ import { Overlay } from "./Window/WindowManager";
 import {
     NewOrReplaceEditor,
     NewOrReplaceSearch,
+    RemoveWindow,
 } from "./Components/sidebar/SideBarOptions";
 
 const defaultWindows: WindowContents[] = [
@@ -29,11 +30,17 @@ const App = () => {
     const SidebarOptions = [
         NewOrReplaceEditor(overlay, setOverlay, windowActions, setWindows),
         NewOrReplaceSearch(overlay, setOverlay, windowActions, setWindows),
+        RemoveWindow(overlay, setOverlay, windowActions, setWindows),
     ];
     return (
         <div id="AppDiv" className="App">
             <SideBar components={SidebarOptions} />
-            <WindowManger windowActions={windowActions} overlay={overlay} />
+            <WindowManger
+                windowActions={windowActions}
+                overlay={overlay}
+                setWindows={setWindows}
+                setOverlay={setOverlay}
+            />
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import { NewOrReplaceOverlay } from "../../Window/Overlay/NewOrReplaceOverlay";
+import { RemoveOverlay } from "../../Window/Overlay/RemoveOverlay";
 import { WindowActions } from "../../Window/WindowActions";
 import {
     Overlay,
@@ -55,6 +56,27 @@ export const NewOrReplaceSearch = (
         }}
     >
         Add Search
+    </a>
+);
+
+export const RemoveWindow = (
+    overlay: Overlay,
+    setOverlay: React.Dispatch<any>,
+    windowActions: WindowActions,
+    setWindows: React.Dispatch<any>
+) => (
+    <a
+        onClick={() => {
+            if (overlay === null) {
+                setOverlay(
+                    RemoveOverlay(windowActions, setWindows, setOverlay)
+                );
+            } else {
+                setOverlay(null);
+            }
+        }}
+    >
+        Remove Window
     </a>
 );
 

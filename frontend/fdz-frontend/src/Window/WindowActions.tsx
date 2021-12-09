@@ -6,7 +6,7 @@ export class WindowActions {
     windows: WindowContents[];
 
     constructor(windows: WindowContents[]) {
-        this.windows = windows;
+        this.windows = _.cloneDeep(windows);
     }
 
     appendWindow(w: WindowContents) {

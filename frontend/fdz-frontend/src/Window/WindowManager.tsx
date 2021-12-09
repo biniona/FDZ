@@ -21,9 +21,13 @@ export enum WindowTypes {
 export const WindowManger = ({
     windowActions,
     overlay,
+    setWindows,
+    setOverlay,
 }: {
     windowActions: WindowActions;
     overlay: JSX.Element | null;
+    setWindows: React.Dispatch<any>;
+    setOverlay: React.Dispatch<any>;
 }) => {
     let overlay_ = <div />;
     if (overlay !== null) {
@@ -39,6 +43,9 @@ export const WindowManger = ({
                             content={value}
                             index={i}
                             length={windowActions.windows.length}
+                            windowActions={windowActions}
+                            setWindows={setWindows}
+                            setOverlay={setOverlay}
                         />
                     </div>
                 ))}
@@ -51,12 +58,18 @@ const Window = ({
     content,
     index,
     length,
+    windowActions,
+    setWindows,
+    setOverlay,
 }: {
     content: WindowContents;
     index: number;
     length: number;
+    windowActions: WindowActions;
+    setWindows: React.Dispatch<any>;
+    setOverlay: React.Dispatch<any>;
 }) => {
-    const Content = GetContent(content);
+    const Content = GetContent(content, windowActions, setWindows, setOverlay);
     return (
         <div
             className="Window"
@@ -71,12 +84,17 @@ const Window = ({
     );
 };
 
-const GetContent = (content: WindowContents) => {
+const GetContent = (
+    content: WindowContents,
+    windowActions: WindowActions,
+    setWindows: React.Dispatch<any>,
+    setOverlay: React.Dispatch<any>
+) => {
     switch (content.type) {
         case WindowTypes.Editor:
             return getEditor(content.card);
         case WindowTypes.Search:
-            return GetSearchComponent();
+            return GetSearchComponent(windowActions, setWindows, setOverlay);
         default:
             return DefaultComponent(content.type.toString());
     }

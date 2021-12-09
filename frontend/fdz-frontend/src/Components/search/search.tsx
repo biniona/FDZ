@@ -1,11 +1,27 @@
 import { Card, CardModel } from "../../Model";
 import React, { useState } from "react";
+import { NewOrReplaceOverlay } from "../../Window/Overlay/NewOrReplaceOverlay";
+import {
+    Overlay,
+    WindowContents,
+    WindowTypes,
+} from "../../Window/WindowManager";
+import { WindowActions } from "../../Window/WindowActions";
 
-export const GetSearchComponent = () => {
+export const GetSearchComponent = (
+    windowActions: WindowActions,
+    setWindows: React.Dispatch<any>,
+    setOverlay: React.Dispatch<any>
+) => {
     const [previewCard, setPreviewCard] = useState(null);
     let preview = <div />;
     if (previewCard !== null) {
-        preview = GetPreviewDisplay(previewCard);
+        preview = GetPreviewDisplay(
+            previewCard,
+            windowActions,
+            setWindows,
+            setOverlay
+        );
     }
     const searchItems = CardModel.map((c: Card, i: number) =>
         GetSearchResult(c, setPreviewCard, i)
@@ -19,13 +35,35 @@ export const GetSearchComponent = () => {
     );
 };
 
-const GetPreviewDisplay = (card: Card) => {
+const GetPreviewDisplay = (
+    card: Card,
+    windowActions: WindowActions,
+    setWindows: React.Dispatch<any>,
+    setOverlay: React.Dispatch<any>
+) => {
     if (card === null) {
         return <div />;
     }
     return (
         <div>
-            <p>{card.content.content}</p>
+            <a
+                onClick={() => {
+                    const candidateWindow: WindowContents = {
+                        id: 1,
+                        type: WindowTypes.Editor,
+                        card: card,
+                    };
+                    const overlay: Overlay = NewOrReplaceOverlay(
+                        candidateWindow,
+                        windowActions,
+                        setWindows,
+                        setOverlay
+                    );
+                    setOverlay(overlay);
+                }}
+            >
+                {card.content.content}
+            </a>
         </div>
     );
 };

@@ -26,8 +26,8 @@ export type Card = {
 
 export type Cards = Array<Card>;
 
-const testCard: Card = {
-    id: "test card",
+const testCard1: Card = {
+    id: "test card 1 ",
     type: CardTypes.Note,
     content: {
         title: "1.2.3",
@@ -35,11 +35,13 @@ const testCard: Card = {
     },
 };
 
-export const CardModel: Cards = [
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-    testCard,
-];
+const testCard2: Card = {
+    id: "test card 2 ",
+    type: CardTypes.Note,
+    content: {
+        title: "4.5.6",
+        content: "hola amigo",
+    },
+};
+
+export const CardModel: Cards = [testCard1, testCard2, testCard1, testCard2];
