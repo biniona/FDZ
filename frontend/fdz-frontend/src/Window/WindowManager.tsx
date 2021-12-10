@@ -1,4 +1,8 @@
-import { GetDimensions } from "./LucasNumber";
+import {
+    Dimensions,
+    ConvertDimensionsToPercent,
+    GetDimensions,
+} from "./LucasNumber";
 import { getEditor } from "../Components/editor/editor";
 import { Card, Cards } from "core";
 import { GetSearchComponent } from "../Components/search/search";
@@ -74,12 +78,15 @@ const Window = ({
     setOverlay: React.Dispatch<any>;
     cards: Cards;
 }) => {
+    const dimensions = GetDimensions(index, length);
+    const dimensionsPercents = ConvertDimensionsToPercent(dimensions);
     const Content = GetContent(
         content,
         windowActions,
         setWindows,
         setOverlay,
-        cards
+        cards,
+        dimensions
     );
     return (
         <div
@@ -87,7 +94,7 @@ const Window = ({
             style={{
                 position: "absolute",
                 overflow: "auto",
-                ...GetDimensions(index, length),
+                ...dimensionsPercents,
             }}
         >
             {Content}
@@ -100,7 +107,8 @@ const GetContent = (
     windowActions: WindowActions,
     setWindows: React.Dispatch<any>,
     setOverlay: React.Dispatch<any>,
-    cards: Cards
+    cards: Cards,
+    dimensions: Dimensions
 ) => {
     switch (content.type) {
         case WindowTypes.Editor:
@@ -110,7 +118,8 @@ const GetContent = (
                 windowActions,
                 setWindows,
                 setOverlay,
-                cards
+                cards,
+                dimensions
             );
         default:
             return DefaultComponent(content.type.toString());

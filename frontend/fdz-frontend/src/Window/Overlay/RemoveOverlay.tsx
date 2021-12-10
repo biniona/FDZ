@@ -1,5 +1,5 @@
 import { WindowActions } from "../WindowActions";
-import { GetDimensions } from "../LucasNumber";
+import { GetDimensions, ConvertDimensionsToPercent } from "../LucasNumber";
 import React from "react";
 
 export const RemoveOverlay = (
@@ -26,7 +26,9 @@ export const RemoveOverlay = (
                                 border: "dashed navy",
                                 position: "absolute",
                                 overflow: "auto",
-                                ...GetDimensions(i, numWindows),
+                                ...ConvertDimensionsToPercent(
+                                    GetDimensions(i, numWindows)
+                                ),
                             }}
                         >
                             {remove}

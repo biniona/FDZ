@@ -95,10 +95,34 @@ const GetShiftTop = (index: number, num_cells: number) => {
 /** numbers into percent strings */
 const p = (n: number) => `${n * 100}%`;
 
+export type Dimensions = {
+    height: number;
+    width: number;
+    left: number;
+    top: number;
+};
+
+export type DimensionsPercents = {
+    height: string;
+    width: string;
+    left: string;
+    top: string;
+};
+
 /** Given the number of cells and the current cell, describe the cell  */
-export const GetDimensions = (index: number, count: number) => ({
-    height: p(GetHeight(index, count)),
-    width: p(GetWidth(index, count)),
-    left: p(GetShiftLeft(index, count)),
-    top: p(GetShiftTop(index, count)),
+export const GetDimensions = (index: number, count: number): Dimensions => ({
+    height: GetHeight(index, count),
+    width: GetWidth(index, count),
+    left: GetShiftLeft(index, count),
+    top: GetShiftTop(index, count),
+});
+
+/** Given the number of cells and the current cell, describe the cell  */
+export const ConvertDimensionsToPercent = (
+    dimensions: Dimensions
+): DimensionsPercents => ({
+    height: p(dimensions.height),
+    width: p(dimensions.width),
+    left: p(dimensions.left),
+    top: p(dimensions.top),
 });

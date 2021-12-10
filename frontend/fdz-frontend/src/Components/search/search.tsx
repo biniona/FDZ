@@ -2,6 +2,11 @@ import { Card, Cards } from "core";
 import React, { useState } from "react";
 import { NewOrReplaceOverlay } from "../../Window/Overlay/NewOrReplaceOverlay";
 import {
+    Dimensions,
+    ConvertDimensionsToPercent,
+    DimensionsPercents,
+} from "../../Window/LucasNumber";
+import {
     Overlay,
     WindowContents,
     WindowTypes,
@@ -12,7 +17,8 @@ export const GetSearchComponent = (
     windowActions: WindowActions,
     setWindows: React.Dispatch<any>,
     setOverlay: React.Dispatch<any>,
-    cards: Cards
+    cards: Cards,
+    dimensions: Dimensions
 ) => {
     const [previewCard, setPreviewCard] = useState(null);
     let preview = <div />;
@@ -21,7 +27,8 @@ export const GetSearchComponent = (
             previewCard,
             windowActions,
             setWindows,
-            setOverlay
+            setOverlay,
+            dimensions
         );
     }
     const searchItems = cards.map((c: Card, i: number) =>
@@ -30,7 +37,7 @@ export const GetSearchComponent = (
     return (
         <div>
             <h2>Search</h2>
-            <ul> {searchItems} </ul>
+            <ul style={{ width: "20%", float: "left" }}> {searchItems} </ul>
             {preview}
         </div>
     );
@@ -40,13 +47,17 @@ const GetPreviewDisplay = (
     card: Card,
     windowActions: WindowActions,
     setWindows: React.Dispatch<any>,
-    setOverlay: React.Dispatch<any>
+    setOverlay: React.Dispatch<any>,
+    dimensions: Dimensions
 ) => {
     if (card === null) {
         return <div />;
     }
+    const percentage: DimensionsPercents = ConvertDimensionsToPercent(
+        getFixedPosition(dimensions, 0.3, 0.6, 0.3, 0.6)
+    );
     return (
-        <div>
+        <div style={{ position: "fixed", ...percentage }}>
             <a
                 onClick={() => {
                     const candidateWindow: WindowContents = {
@@ -86,3 +97,16 @@ const GetSearchResult = (
         </li>
     );
 };
+
+const getFixedPosition = (
+    dimensions: Dimensions,
+    top: number,
+    left: number,
+    width: number,
+    height: number
+): Dimensions => ({
+    left: dimensions.left + dimensions.width * left,
+    top: dimensions.top + dimensions.height * top,
+    width: dimensions.width * width,
+    height: dimensions.height * height,
+});

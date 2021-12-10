@@ -1,6 +1,6 @@
 import { WindowContents, WindowTypes } from "../WindowManager";
 import { WindowActions } from "../WindowActions";
-import { GetDimensions } from "../LucasNumber";
+import { GetDimensions, ConvertDimensionsToPercent } from "../LucasNumber";
 import React from "react";
 
 export const NewOrReplaceOverlay = (
@@ -34,7 +34,9 @@ export const NewOrReplaceOverlay = (
                                 border: "dashed navy",
                                 position: "absolute",
                                 overflow: "auto",
-                                ...GetDimensions(i, numWindows),
+                                ...ConvertDimensionsToPercent(
+                                    GetDimensions(i, numWindows)
+                                ),
                             }}
                         >
                             {changeButton}

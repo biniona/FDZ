@@ -17,10 +17,7 @@ import {
 import { loadCards } from "./API/data";
 
 const defaultWindows: WindowContents[] = [
-    { id: 1, type: WindowTypes.Editor, card: null },
-    { id: 3, type: WindowTypes.Editor, card: null },
-    { id: 1, type: WindowTypes.Editor, card: null },
-    { id: 3, type: WindowTypes.Editor, card: null },
+    { id: 1, type: WindowTypes.Search, card: null },
 ];
 
 const App = () => {
