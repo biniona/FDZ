@@ -1,6 +1,6 @@
 import { GetDimensions } from "./LucasNumber";
 import { getEditor } from "../Components/editor/editor";
-import { Card } from "core";
+import { Card, Cards } from "core";
 import { GetSearchComponent } from "../Components/search/search";
 import { WindowActions } from "./WindowActions";
 
@@ -23,11 +23,13 @@ export const WindowManger = ({
     overlay,
     setWindows,
     setOverlay,
+    cards,
 }: {
     windowActions: WindowActions;
     overlay: JSX.Element | null;
     setWindows: React.Dispatch<any>;
     setOverlay: React.Dispatch<any>;
+    cards: Cards;
 }) => {
     let overlay_ = <div />;
     if (overlay !== null) {
@@ -46,6 +48,7 @@ export const WindowManger = ({
                             windowActions={windowActions}
                             setWindows={setWindows}
                             setOverlay={setOverlay}
+                            cards={cards}
                         />
                     </div>
                 ))}
@@ -61,6 +64,7 @@ const Window = ({
     windowActions,
     setWindows,
     setOverlay,
+    cards,
 }: {
     content: WindowContents;
     index: number;
@@ -68,8 +72,15 @@ const Window = ({
     windowActions: WindowActions;
     setWindows: React.Dispatch<any>;
     setOverlay: React.Dispatch<any>;
+    cards: Cards;
 }) => {
-    const Content = GetContent(content, windowActions, setWindows, setOverlay);
+    const Content = GetContent(
+        content,
+        windowActions,
+        setWindows,
+        setOverlay,
+        cards
+    );
     return (
         <div
             className="Window"
@@ -88,13 +99,19 @@ const GetContent = (
     content: WindowContents,
     windowActions: WindowActions,
     setWindows: React.Dispatch<any>,
-    setOverlay: React.Dispatch<any>
+    setOverlay: React.Dispatch<any>,
+    cards: Cards
 ) => {
     switch (content.type) {
         case WindowTypes.Editor:
             return getEditor(content.card);
         case WindowTypes.Search:
-            return GetSearchComponent(windowActions, setWindows, setOverlay);
+            return GetSearchComponent(
+                windowActions,
+                setWindows,
+                setOverlay,
+                cards
+            );
         default:
             return DefaultComponent(content.type.toString());
     }

@@ -1,5 +1,4 @@
-import { Card } from "core";
-import { CardModel } from "../../API/data";
+import { Card, Cards } from "core";
 import React, { useState } from "react";
 import { NewOrReplaceOverlay } from "../../Window/Overlay/NewOrReplaceOverlay";
 import {
@@ -12,7 +11,8 @@ import { WindowActions } from "../../Window/WindowActions";
 export const GetSearchComponent = (
     windowActions: WindowActions,
     setWindows: React.Dispatch<any>,
-    setOverlay: React.Dispatch<any>
+    setOverlay: React.Dispatch<any>,
+    cards: Cards
 ) => {
     const [previewCard, setPreviewCard] = useState(null);
     let preview = <div />;
@@ -24,7 +24,7 @@ export const GetSearchComponent = (
             setOverlay
         );
     }
-    const searchItems = CardModel.map((c: Card, i: number) =>
+    const searchItems = cards.map((c: Card, i: number) =>
         GetSearchResult(c, setPreviewCard, i)
     );
     return (
@@ -82,7 +82,7 @@ const GetSearchResult = (
         <li key={key}>
             <a
                 onClick={() => setPreviewCard(card)}
-            >{`${card.id} ${card.type}`}</a>
+            >{`${card.content.title} ${card.type}`}</a>
         </li>
     );
 };

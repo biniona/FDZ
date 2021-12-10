@@ -1,21 +1,16 @@
-import { Card, CardTypes, Cards } from "core";
-
-const testCard1: Card = {
-    id: "test card 1 ",
-    type: CardTypes.Note,
-    content: {
-        title: "1.2.3",
-        content: "hello friend",
-    },
+import React from "react";
+import { API_URL } from "../constants";
+export const loadCards = (setCards: React.Dispatch<any>) => {
+    fetch(`${API_URL}/get-notes`, {
+        headers: {
+            Accept: "application/json",
+        },
+    })
+        .then((res) => {
+            return res.json();
+        })
+        .then((json) => setCards(json))
+        .catch((err) => {
+            throw err;
+        });
 };
-
-const testCard2: Card = {
-    id: "test card 2 ",
-    type: CardTypes.Note,
-    content: {
-        title: "4.5.6",
-        content: "hola amigo",
-    },
-};
-
-export const CardModel: Cards = [testCard1, testCard2, testCard1, testCard2];

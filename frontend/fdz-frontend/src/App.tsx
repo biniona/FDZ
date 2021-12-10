@@ -14,6 +14,7 @@ import {
     NewOrReplaceSearch,
     RemoveWindow,
 } from "./Components/sidebar/SideBarOptions";
+import { loadCards } from "./API/data";
 
 const defaultWindows: WindowContents[] = [
     { id: 1, type: WindowTypes.Editor, card: null },
@@ -26,6 +27,10 @@ const App = () => {
     const [overlay, setOverlay]: [Overlay, React.Dispatch<any>] =
         useState(null);
     const [windows, setWindows] = useState(defaultWindows);
+    const [cards, setCards] = useState([]);
+    if (cards.length === 0) {
+        loadCards(setCards);
+    }
     const windowActions = new WindowActions(windows);
     const SidebarOptions = [
         NewOrReplaceEditor(overlay, setOverlay, windowActions, setWindows),
@@ -40,6 +45,7 @@ const App = () => {
                 overlay={overlay}
                 setWindows={setWindows}
                 setOverlay={setOverlay}
+                cards={cards}
             />
         </div>
     );
