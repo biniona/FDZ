@@ -1,4 +1,5 @@
-import { Card, CardModel } from "../../Model";
+import { Card } from "core";
+import { CardModel } from "../../API/data";
 import React, { useState } from "react";
 import { NewOrReplaceOverlay } from "../../Window/Overlay/NewOrReplaceOverlay";
 import {

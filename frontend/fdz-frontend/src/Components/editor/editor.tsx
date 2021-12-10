@@ -1,5 +1,5 @@
 import Editor from "rich-markdown-editor";
-import { Card, CardTypes } from "../../Model";
+import { Card, CardTypes } from "core";
 import { noteTmpl } from "./templates/note.md";
 import { bibTmpl } from "./templates/bib.md";
 

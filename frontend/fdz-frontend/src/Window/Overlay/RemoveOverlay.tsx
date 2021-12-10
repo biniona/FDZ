@@ -1,4 +1,3 @@
-import { WindowContents, WindowTypes } from "../WindowManager";
 import { WindowActions } from "../WindowActions";
 import { GetDimensions } from "../LucasNumber";
 import React from "react";

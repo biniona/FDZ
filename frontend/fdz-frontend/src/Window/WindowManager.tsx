@@ -1,6 +1,6 @@
 import { GetDimensions } from "./LucasNumber";
 import { getEditor } from "../Components/editor/editor";
-import { Card } from "../Model";
+import { Card } from "core";
 import { GetSearchComponent } from "../Components/search/search";
 import { WindowActions } from "./WindowActions";
 

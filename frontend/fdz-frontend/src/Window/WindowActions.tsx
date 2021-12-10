@@ -1,4 +1,3 @@
-import React from "react";
 import { WindowContents } from "./WindowManager";
 import _ from "lodash";
 
