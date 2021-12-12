@@ -10,7 +10,7 @@ export const getEditor = (card: Card) => {
     switch (card.type) {
         case CardTypes.Note:
             if (card.content !== null) {
-                return loadNote(String(card.content.content));
+                return loadNote(card.id, card.content.content);
             }
             return getNewNote();
         case CardTypes.Bib:
@@ -22,10 +22,28 @@ export const getEditor = (card: Card) => {
     }
 };
 
-const getNewNote = () => <Editor defaultValue={noteTmpl} />;
+const getNewNote = () => (
+    <EditorWrapper id="default-note-editor" content={noteTmpl} />
+);
 
-const getNewBib = () => <Editor defaultValue={bibTmpl} />;
+const getNewBib = () => (
+    <EditorWrapper id="default-bib-editor" content={bibTmpl} />
+);
 
-const getNewScratch = () => <Editor defaultValue="Write whatever you want!" />;
+const getNewScratch = () => (
+    <EditorWrapper
+        id="default-scratch-editor"
+        content="Write whatever you want!"
+    />
+);
 
-const loadNote = (content: string) => <Editor defaultValue={content} />;
+const loadNote = (id: string, content: string) => (
+    <EditorWrapper id={id} content={content} />
+);
+
+const EditorWrapper = ({ id, content }: { id: string; content: string }) => (
+    <div id={id}>
+        <p>{id}</p>
+        <Editor value={content} />
+    </div>
+);

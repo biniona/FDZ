@@ -1,17 +1,17 @@
 interface Content {
-    content: String;
+    content: string;
 }
 
 export interface Note extends Content {
-    title: String;
+    title: string;
 }
 
 export interface Bib extends Content {
-    title: String;
+    title: string;
 }
 
 export interface Scratch extends Content {
-    title: String;
+    title: string;
 }
 
 export enum CardTypes {
@@ -21,7 +21,7 @@ export enum CardTypes {
 }
 
 export type Card = {
-    id: String;
+    id: string;
     type: CardTypes;
     content: Note | Bib | Scratch;
 } | null;

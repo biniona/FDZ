@@ -61,7 +61,7 @@ const GetPreviewDisplay = (
             <a
                 onClick={() => {
                     const candidateWindow: WindowContents = {
-                        id: 1,
+                        id: card.id,
                         type: WindowTypes.Editor,
                         card: card,
                     };

@@ -11,7 +11,7 @@ import { WindowActions } from "./WindowActions";
 export type Overlay = JSX.Element | null;
 
 export type WindowContents = {
-    id: number;
+    id: string;
     type: WindowTypes;
     card: Card;
 };

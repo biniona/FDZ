@@ -81,13 +81,13 @@ export const RemoveWindow = (
 );
 
 const defaultEditor: WindowContents = {
-    id: 1,
+    id: "default_editor",
     type: WindowTypes.Editor,
     card: null,
 };
 
 const defaultSearch: WindowContents = {
-    id: 1,
+    id: "default_window",
     type: WindowTypes.Search,
     card: null,
 };
