@@ -13,12 +13,18 @@ export interface Bib extends Content {
 export interface Scratch extends Content {
     title: string;
 }
-
 export enum CardTypes {
     Note = "Note",
     Scratch = "Scratch",
     Bib = "Bib",
+    Empty = "Empty",
 }
+export const NONEMPTY_CARD_TYPES_ARR = Object.values(CardTypes).filter((t) => {
+    if (t === CardTypes.Empty) {
+        return false;
+    }
+    return true;
+});
 
 export type nullableCard = {
     filePath: string;

@@ -3,40 +3,35 @@ import { Card, CardTypes } from "../../Core/Model";
 import { noteTmpl } from "./templates/note.md";
 import { bibTmpl } from "./templates/bib.md";
 import { saveCard } from "../../API/data";
+import { getEditorSelectorForm } from "./editor-selector";
 
 export const getEditor = (card: Card) => {
     console.log(card);
-    if (card === null) {
-        return getNewNote();
-    }
     switch (card.type) {
         case CardTypes.Note:
-            if (card.content !== null) {
+            if (card.content.content !== null && card.content.content !== "") {
                 return loadNote(card.filePath, card.content.content);
             }
-            return getNewNote();
+            return getNewNote(card);
         case CardTypes.Bib:
-            return getNewBib();
+            return getNewBib(card);
         case CardTypes.Scratch:
-            return getNewScratch();
+            return getNewScratch(card);
         default:
-            return <Editor defaultValue="Write anything!" />;
+            return getEditorSelectorForm();
     }
 };
 
-const getNewNote = () => (
-    <EditorWrapper id="default-note-editor" content={noteTmpl} />
+const getNewNote = (card: Card) => (
+    <EditorWrapper id={card.filePath} content={noteTmpl} />
 );
 
-const getNewBib = () => (
-    <EditorWrapper id="default-bib-editor" content={bibTmpl} />
+const getNewBib = (card: Card) => (
+    <EditorWrapper id={card.filePath} content={bibTmpl} />
 );
 
-const getNewScratch = () => (
-    <EditorWrapper
-        id="default-scratch-editor"
-        content="Write whatever you want!"
-    />
+const getNewScratch = (card: Card) => (
+    <EditorWrapper id={card.filePath} content="Write whatever you want!" />
 );
 
 const loadNote = (id: string, content: string) => (

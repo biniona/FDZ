@@ -4,7 +4,7 @@ import {
     GetDimensions,
 } from "./LucasNumber";
 import { getEditor } from "../Components/editor/editor";
-import { nullableCard, Card, Cards } from "../Core/Model";
+import { nullableCard, Card, Cards, CardTypes } from "../Core/Model";
 import { GetSearchComponent } from "../Components/search/search";
 import { WindowActions } from "./WindowActions";
 
@@ -115,7 +115,12 @@ const GetContent = (
             if (content.card !== null) {
                 return getEditor(content.card);
             } else {
-                throw "nullableCard is null, should be card";
+                const newNote: Card = {
+                    filePath: "",
+                    type: CardTypes.Empty,
+                    content: { title: "", content: "" },
+                };
+                return getEditor(newNote);
             }
         case WindowTypes.Search:
             return GetSearchComponent(
