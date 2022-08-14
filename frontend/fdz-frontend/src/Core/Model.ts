@@ -20,10 +20,16 @@ export enum CardTypes {
     Bib = "Bib",
 }
 
-export type Card = {
-    id: string;
+export type nullableCard = {
+    filePath: string;
     type: CardTypes;
     content: Note | Bib | Scratch;
 } | null;
 
-export type Cards = Array<Card>;
+export type Card = {
+    filePath: string;
+    type: CardTypes;
+    content: Note | Bib | Scratch;
+};
+
+export type Cards = Card[];

@@ -10,3 +10,8 @@ export const ZETTL_STRUCTURE = {
 };
 
 export const TEST_DIR: string = ".test";
+
+export const PATH_GET_NOTES = "/get-notes";
+export const PATH_SAVE = "/save";
+export const PATH_SAVE_PARAM_FILE_PATH = "filePath";
+export const PATH_SAVE_PARAM_CONTENT = "content";

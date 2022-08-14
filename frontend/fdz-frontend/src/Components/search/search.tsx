@@ -1,4 +1,4 @@
-import { Card, Cards } from "core";
+import { Card, Cards } from "../../Core/Model";
 import React, { useState } from "react";
 import { NewOrReplaceOverlay } from "../../Window/Overlay/NewOrReplaceOverlay";
 import {
@@ -61,7 +61,7 @@ const GetPreviewDisplay = (
             <a
                 onClick={() => {
                     const candidateWindow: WindowContents = {
-                        id: card.id,
+                        id: card.filePath,
                         type: WindowTypes.Editor,
                         card: card,
                     };

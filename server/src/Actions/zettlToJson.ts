@@ -1,11 +1,13 @@
 import fs from "fs";
 import path from "path";
-import { Cards, CardTypes } from "./Core/Model.js";
+
+import { Cards, CardTypes } from "../Core/Model";
+
 import {
     NOTE_DIR_NAME,
     BIB_DIR_NAME,
     SCRATCH_DIR_NAME,
-} from "./Core/constants.js";
+} from "../Core/constants.js";
 
 type dirInformation = {
     content: string;
@@ -45,7 +47,7 @@ const asyncArrToCards = async (
     const arr = await arrPromise;
     for (const content of arr) {
         cards.push({
-            filePath: content.fileName,
+            filePath: `${content.fileName}`,
             type: cardType,
             content: {
                 content: content.content,
@@ -72,7 +74,7 @@ const readDirToArray = async (destination: string, dirName: string) => {
             const text = fs.readFileSync(filePath, "utf-8");
             const fileInfo: dirInformation = {
                 content: text,
-                fileName: path.join(dirName, file),
+                fileName: path.join(dirName, filePath),
             };
             dirContent.push(fileInfo);
         }

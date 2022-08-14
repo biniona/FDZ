@@ -1,7 +1,7 @@
-import f from "./fileActions";
-import { ZETTL_STRUCTURE, TEST_DIR } from "./Core/constants.js";
+import z2j from "./zettlToJson";
 import fs from "fs";
-import { CardTypes } from "./Core/Model.js";
+import { CardTypes } from "../Core/Model";
+import { ZETTL_STRUCTURE, TEST_DIR } from "../Core/constants";
 
 beforeEach(() => {
     createTestDir();
@@ -12,7 +12,7 @@ afterEach(() => {
 });
 
 test("test that files are added to notes array", () => {
-    return f(`./${TEST_DIR}/${ZETTL_STRUCTURE.root}`).then((data) => {
+    return z2j(`./${TEST_DIR}/${ZETTL_STRUCTURE.root}`).then((data) => {
         expect(data[0]).toStrictEqual({
             id: "0_Note",
             type: CardTypes.Note,
