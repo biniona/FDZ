@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { Cards, CardTypes } from "./Core/Model.js";
+import { CardPayload, Cards, CardTypes } from "./Core/Model.js";
 import {
     NOTE_DIR_NAME,
     BIB_DIR_NAME,
@@ -26,13 +26,17 @@ export default async (zettlPath: string) => {
         SCRATCH_DIR_NAME
     );
 
-    const notesArr = asyncArrToCards(notes, CardTypes.Note);
-    const bibsArr = asyncArrToCards(bibs, CardTypes.Bib);
-    const scratchesArr = asyncArrToCards(scratches, CardTypes.Scratch);
+    const notesArr = await asyncArrToCards(notes, CardTypes.Note);
+    const bibsArr = await asyncArrToCards(bibs, CardTypes.Bib);
+    const scratchesArr = await asyncArrToCards(scratches, CardTypes.Scratch);
 
-    const allCards: Cards = (await notesArr)
-        .concat(await bibsArr)
-        .concat(await scratchesArr);
+    const allCards: CardPayload = {
+        [CardTypes.Bib]: bibsArr,
+        [CardTypes.Note]: notesArr,
+        [CardTypes.Scratch]: scratchesArr,
+        [CardTypes.Empty]: [],
+    };
+
     return allCards;
 };
 

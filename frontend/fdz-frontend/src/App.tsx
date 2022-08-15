@@ -24,8 +24,8 @@ const App = () => {
     const [overlay, setOverlay]: [Overlay, React.Dispatch<any>] =
         useState(null);
     const [windows, setWindows] = useState(defaultWindows);
-    const [cards, setCards] = useState([]);
-    if (cards.length === 0) {
+    const [cards, setCards] = useState({});
+    if (Object.keys(cards).length === 0) {
         loadCards(setCards);
     }
     const windowActions = new WindowActions(windows);

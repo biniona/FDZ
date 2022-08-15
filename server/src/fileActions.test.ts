@@ -13,7 +13,7 @@ afterEach(() => {
 
 test("test that files are added to notes array", () => {
     return f(`./${TEST_DIR}/${ZETTL_STRUCTURE.root}`).then((data) => {
-        expect(data[0]).toStrictEqual({
+        expect(data.Note[0]).toStrictEqual({
             id: "0_Note",
             type: CardTypes.Note,
             content: {
@@ -21,7 +21,7 @@ test("test that files are added to notes array", () => {
                 title: "test_note",
             },
         });
-        expect(data[1]).toStrictEqual({
+        expect(data.Bib[0]).toStrictEqual({
             id: "0_Bib",
             type: CardTypes.Bib,
             content: {

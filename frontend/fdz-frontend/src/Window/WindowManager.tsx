@@ -4,7 +4,14 @@ import {
     GetDimensions,
 } from "./LucasNumber";
 import { getEditor } from "../Components/editor/editor";
-import { nullableCard, Card, Cards, CardTypes } from "../Core/Model";
+import {
+    nullableCard,
+    Card,
+    nullableCardPayload,
+    CardPayload,
+    CardTypes,
+    isCardPayload,
+} from "../Core/Model";
 import { GetSearchComponent } from "../Components/search/search";
 import { WindowActions } from "./WindowActions";
 
@@ -33,7 +40,7 @@ export const WindowManger = ({
     overlay: JSX.Element | null;
     setWindows: React.Dispatch<any>;
     setOverlay: React.Dispatch<any>;
-    cards: Cards;
+    cards: nullableCardPayload;
 }) => {
     let overlay_ = <div />;
     if (overlay !== null) {
@@ -76,7 +83,7 @@ const Window = ({
     windowActions: WindowActions;
     setWindows: React.Dispatch<any>;
     setOverlay: React.Dispatch<any>;
-    cards: Cards;
+    cards: nullableCardPayload;
 }) => {
     const dimensions = GetDimensions(index, length);
     const dimensionsPercents = ConvertDimensionsToPercent(dimensions);
@@ -107,7 +114,7 @@ const GetContent = (
     windowActions: WindowActions,
     setWindows: React.Dispatch<any>,
     setOverlay: React.Dispatch<any>,
-    cards: Cards,
+    cards: nullableCardPayload,
     dimensions: Dimensions
 ) => {
     switch (content.type) {
@@ -123,13 +130,17 @@ const GetContent = (
                 return getEditor(newNote);
             }
         case WindowTypes.Search:
-            return GetSearchComponent(
-                windowActions,
-                setWindows,
-                setOverlay,
-                cards,
-                dimensions
-            );
+            if (isCardPayload(cards)) {
+                return GetSearchComponent(
+                    windowActions,
+                    setWindows,
+                    setOverlay,
+                    cards,
+                    dimensions
+                );
+            } else {
+                return <div />;
+            }
         default:
             return DefaultComponent(content.type.toString());
     }

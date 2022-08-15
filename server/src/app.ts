@@ -3,6 +3,7 @@ import f from "./fileActions.js";
 import sf from "./Actions/saveFile.js";
 import cors from "cors";
 import path from "path";
+import { CardPayload } from "./Core/Model.js";
 
 const app = express();
 app.use(cors());
@@ -14,7 +15,7 @@ const ZETTL_PATH = process.env.ZETTL_DIR;
 
 // define a route handler for the default home page
 app.get("/get-notes", (req, res) => {
-    Promise.resolve(f(ZETTL_PATH)).then((v: any[]) => {
+    Promise.resolve(f(ZETTL_PATH)).then((v: CardPayload) => {
         res.json(v);
     });
 });

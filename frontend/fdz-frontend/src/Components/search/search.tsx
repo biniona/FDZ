@@ -1,4 +1,4 @@
-import { Card, Cards } from "../../Core/Model";
+import { Card, Cards, CardPayload, CardTypes } from "../../Core/Model";
 import React, { useState } from "react";
 import { NewOrReplaceOverlay } from "../../Window/Overlay/NewOrReplaceOverlay";
 import {
@@ -17,7 +17,7 @@ export const GetSearchComponent = (
     windowActions: WindowActions,
     setWindows: React.Dispatch<any>,
     setOverlay: React.Dispatch<any>,
-    cards: Cards,
+    cards: CardPayload,
     dimensions: Dimensions
 ) => {
     const [previewCard, setPreviewCard] = useState(null);
@@ -31,7 +31,7 @@ export const GetSearchComponent = (
             dimensions
         );
     }
-    const searchItems = cards.map((c: Card, i: number) =>
+    const searchItems = cards[CardTypes.Note].map((c: Card, i: number) =>
         GetSearchResult(c, setPreviewCard, i)
     );
     return (

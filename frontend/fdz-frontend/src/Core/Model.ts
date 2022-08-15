@@ -39,3 +39,12 @@ export type Card = {
 };
 
 export type Cards = Card[];
+
+export type CardPayload = Record<CardTypes, Cards>;
+export type nullableCardPayload = CardPayload | {};
+
+export function isCardPayload(
+    payload: CardPayload | nullableCardPayload
+): payload is CardPayload {
+    return (payload as CardPayload).Note !== undefined;
+}
